@@ -1,30 +1,30 @@
-# Order Messaging com RabbitMQ e MongoDB
+# Order Messaging with RabbitMQ and MongoDB
 
-## Sobre o projeto
+## About the project
 
-Esse projeto foi criado com o objetivo **exclusivo de estudo e aprofundamento em mensageria**, utilizando **RabbitMQ** com **Spring Boot**. A ideia aqui não é apenas "fazer funcionar", mas entender de verdade como eventos trafegam entre sistemas, como são consumidos, processados e persistidos, simulando um cenário próximo do que é encontrado em sistemas reais de mercado.
+This project was created with the **exclusive goal of studying and deeply understanding messaging**, using **RabbitMQ** with **Spring Boot**. The intention here is not just to "make it work", but to truly understand how events flow between systems, how they are consumed, processed, and persisted, simulating scenarios very close to what is found in real-world production systems.
 
-O fluxo principal do projeto gira em torno da criação de um pedido (*Order Created*), onde um evento é publicado em uma fila do RabbitMQ e consumido por um listener, que então processa esse evento e persiste os dados no **MongoDB**.
+The main flow of the project revolves around an *Order Created* event, where an event is published to a RabbitMQ queue and consumed by a listener, which then processes this event and persists the data into **MongoDB**.
 
-Esse tipo de arquitetura é muito comum em ambientes que trabalham com **event-driven architecture**, **eventual consistency** e **desacoplamento entre serviços**.
-
----
-
-## O que esse projeto faz
-
-De forma resumida, o projeto:
-
-* Recebe um evento de pedido criado via RabbitMQ
-* Desserializa a mensagem automaticamente para um DTO de evento
-* Processa o evento dentro de um listener
-* Converte o evento para um modelo de persistência
-* Persiste o pedido no MongoDB
-
-Tudo isso utilizando boas práticas de organização de código, separação de responsabilidades e foco em aprendizado de mensageria.
+This type of architecture is very common in systems that adopt **event-driven architecture**, **eventual consistency**, and **service decoupling**.
 
 ---
 
-## Tecnologias utilizadas
+## What this project does
+
+In a simplified way, this project:
+
+* Receives an order created event via RabbitMQ
+* Automatically deserializes the message into an event DTO
+* Processes the event inside a listener
+* Converts the event into a persistence model
+* Persists the order data into MongoDB
+
+All of this is done following good practices such as clear separation of responsibilities, clean code organization, and a strong focus on learning messaging concepts.
+
+---
+
+## Technologies used
 
 * Java
 * Spring Boot
@@ -35,24 +35,24 @@ Tudo isso utilizando boas práticas de organização de código, separação de 
 
 ---
 
-## Estrutura do projeto
+## Project structure
 
-O projeto segue uma separação clara de responsabilidades:
+The project follows a clear separation of concerns:
 
-* **config**: configurações do RabbitMQ (queues, converters, etc)
-* **listener**: consumidores das filas
-* **listener.dto**: DTOs que representam os eventos recebidos
-* **mapper**: conversão de eventos para documentos de persistência
-* **document**: modelos que representam os documentos do MongoDB
-* **repository**: acesso aos dados no MongoDB
+* **config**: RabbitMQ configurations (queues, converters, etc.)
+* **listener**: queue consumers
+* **listener.dto**: DTOs that represent the received events
+* **mapper**: conversion from events to persistence documents
+* **document**: MongoDB document models
+* **repository**: MongoDB data access layer
 
-Essa separação ajuda a manter o código organizado e facilita a evolução do projeto.
+This structure helps keep the codebase organized and makes the project easier to evolve.
 
 ---
 
-## Exemplo de evento consumido
+## Example of consumed event
 
-Exemplo de mensagem enviada para a fila:
+Example of a message sent to the queue:
 
 ```json
 {
@@ -73,7 +73,7 @@ Exemplo de mensagem enviada para a fila:
 }
 ```
 
-Esse JSON é convertido automaticamente para o evento:
+This JSON is automatically converted into the following event:
 
 ```java
 OrderCreatedEvent
@@ -81,26 +81,26 @@ OrderCreatedEvent
 
 ---
 
-## Objetivo de aprendizado
+## Learning goals
 
-Os principais pontos de aprendizado desse projeto são:
+The main learning goals of this project are:
 
-* Entender como funciona o RabbitMQ na prática
-* Aprender a configurar filas, listeners e conversores
-* Trabalhar com eventos de forma desacoplada
-* Persistir dados a partir de eventos
-* Simular cenários reais de sistemas distribuídos
+* Understand how RabbitMQ works in practice
+* Learn how to configure queues, listeners, and message converters
+* Work with events in a decoupled way
+* Persist data based on consumed events
+* Simulate real-world distributed system scenarios
 
-Esse projeto também serve como base para evoluções futuras, como:
+This project also serves as a foundation for future improvements, such as:
 
 * Dead Letter Queue (DLQ)
-* Retry e backoff
-* Ack manual
-* Idempotência
-* Versionamento de eventos
+* Retry and backoff strategies
+* Manual acknowledgements
+* Idempotency
+* Event versioning
 
 ---
 
-## Observação final
+## Final notes
 
-Esse projeto **não tem foco em interface ou regra de negócio complexa**. O foco é totalmente voltado para **mensageria, eventos e arquitetura**, servindo como um laboratório de ap
+This project **does not focus on UI or complex business rules**. The entire focus is on **messaging, events, and architecture**, serving as a learning lab to experiment and gain hands-on experience with RabbitMQ and event-driven systems.
