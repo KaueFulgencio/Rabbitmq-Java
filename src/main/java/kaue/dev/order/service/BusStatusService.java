@@ -2,7 +2,6 @@ package kaue.dev.order.service;
 
 import kaue.dev.order.entity.BusStatusEntity;
 import kaue.dev.order.repository.BusStatusRepository;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +19,5 @@ public class BusStatusService {
 
     public BusStatusEntity save(BusStatusEntity busStatus) {
         return busStatusRepository.save(busStatus);
-    }
-
-    @RabbitListener(queues = "bus-status-queue")
-    public void consumeBusStatus(BusStatusEntity busStatus) {
-        busStatusRepository.save(busStatus);
     }
 }

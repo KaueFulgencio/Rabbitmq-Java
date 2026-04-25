@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfig {
 
-    public static final String ORDER_CREATED_QUEUE = "api_queue-created";
     public static final String BUS_STATUS_EXCHANGE = "bus-status-exchange";
     public static final String BUS_STATUS_QUEUE = "bus-status-queue";
     public static final String BUS_STATUS_ROUTING_KEY = "bus.status.created";
@@ -20,10 +19,6 @@ public class RabbitMqConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Bean
-    public Declarable orderCreatedQueue(){
-        return new Queue(ORDER_CREATED_QUEUE);
-    }
 
     @Bean
     public DirectExchange busStatusExchange() {
