@@ -14,11 +14,15 @@ public class RabbitMqConfig {
     public static final String BUS_STATUS_QUEUE = "bus-status-queue";
     public static final String BUS_STATUS_ROUTING_KEY = "bus.status.created";
 
+    // DLQ constants
+    public static final String BUS_STATUS_DLX = "bus-status-dlx";
+    public static final String BUS_STATUS_DLQ = "bus-status-dlq";
+    public static final String BUS_STATUS_DLQ_ROUTING_KEY = "bus.status.failed";
+
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
-
 
     @Bean
     public DirectExchange busStatusExchange() {
@@ -29,6 +33,8 @@ public class RabbitMqConfig {
     public Queue busStatusQueue() {
         return QueueBuilder
                 .durable(BUS_STATUS_QUEUE)
+                .withArgument("x-dead-letter-exchange", BUS_STATUS_DLX)
+                .withArgument("x-dead-letter-routing-key", BUS_STATUS_DLQ_ROUTING_KEY)
                 .build();
     }
 
@@ -38,6 +44,29 @@ public class RabbitMqConfig {
                 .bind(busStatusQueue())
                 .to(busStatusExchange())
                 .with(BUS_STATUS_ROUTING_KEY);
+    }
+
+    // DLQ Exchange
+    @Bean
+    public DirectExchange busStatusDlx() {
+        return new DirectExchange(BUS_STATUS_DLX, true, false);
+    }
+
+    // DLQ Queue
+    @Bean
+    public Queue busStatusDlq() {
+        return QueueBuilder
+                .durable(BUS_STATUS_DLQ)
+                .build();
+    }
+
+    // DLQ Binding
+    @Bean
+    public Binding busStatusDlqBinding() {
+        return BindingBuilder
+                .bind(busStatusDlq())
+                .to(busStatusDlx())
+                .with(BUS_STATUS_DLQ_ROUTING_KEY);
     }
 
     @Bean
@@ -51,6 +80,7 @@ public class RabbitMqConfig {
         factory.setMessageConverter(messageConverter);
         factory.setConcurrentConsumers(3);
         factory.setMaxConcurrentConsumers(10);
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL); // Manual ACK
         return factory;
     }
 }

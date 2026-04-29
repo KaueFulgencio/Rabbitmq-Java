@@ -1,5 +1,7 @@
 HELP.md
 AGENTS.md
+RABBITMQ_GUIDE.md
+README_PROJETO.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
